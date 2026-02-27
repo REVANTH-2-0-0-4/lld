@@ -27,7 +27,7 @@ public:
 
     const vector<Product*>& getProducts() { 
         return products;
-    } 
+    } // ampercent is to say that it is returning by reference and const is to say that it cannot be modified by the caller
 
     // 1. Calculates total price in cart.
     double calculateTotal() {
