@@ -1,4 +1,5 @@
-#include<bits/stdc++.h>
+#include<iostream>
+#include<vector>
 using namespace std;
 
 class documentelement{
@@ -63,17 +64,40 @@ class mongopersistance : public persistance{
         cout<<"the given doc is saved to mongodb successfully"<<endl;
     }
 };
+class documenteditor {
+    document* doc;
+    persistance*  storage;
+
+public:
+    documenteditor(document* doc , persistance* storage) {
+        this->storage = storage;
+        this->doc = doc;
+    }
+    void addtextelement(string s){
+        doc->addElement(new textelement(s));
+    }
+    void addimageelement(string s){
+        doc->addElement(new imageelement(s));
+    }
+    void addlineelement(){
+        doc->addElement(new lineelement());
+    }
+    void persist(){
+        storage->save(doc);
+    }
+    string render(){
+       return doc->renderdocument();
+    }
+};
 int main(){
-    document* doc = new document(); 
-    documentelement * item1 = new textelement("hi i am building a google doc");
-    documentelement *item2 =  new imageelement("/users/revan/desktop/photos/524.jpg");
-    documentelement *item3 =  new lineelement(); 
-    doc->addElement(item1);
-    doc->addElement(item3);
-    doc->addElement(item2);
-    string res = doc->renderdocument();
-    cout<<res<<endl;    
-    mongopersistance* mongo = new mongopersistance();
-    mongo->save(doc);
+    persistance* storage = new mongopersistance();
+    document *doc = new document();
+    documenteditor* googledoc = new documenteditor(doc,storage);
+    googledoc->addtextelement("HI , i am building a google doc ");
+    googledoc->addlineelement();
+    googledoc->addimageelement("/users/revanth/desktop/photos/5622.jpg");
+    string s = googledoc->render();
+    cout<<s<<endl;
+    googledoc->persist();
     return 0;    
 }
